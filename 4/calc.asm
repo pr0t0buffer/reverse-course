@@ -136,12 +136,12 @@ L:
     jne L
 ;print result 
 L1:
-pop dx
-add dx, 0x30 
-mov al, dl
-mov ah, 0xe 
-int 10h
-dec cx
+    pop dx
+    add dx, 0x30 
+    mov al, dl
+    mov ah, 0xe 
+    int 10h
+    dec cx
 jne L1  
 
 ;exit
