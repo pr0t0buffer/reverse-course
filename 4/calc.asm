@@ -1,21 +1,26 @@
 
 name "calc"
 ;simple calc, which can only sum to numbers. made for emu8086
-PUTC    MACRO   char
-        PUSH    AX
-        MOV     AL, char
-        MOV     AH, 0Eh
-        INT     10h     
-        POP     AX
-ENDM   
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; clear screen and set cursor   
+mov al, 02h
+mov ah, 00h
+int 10h
 
-; read and write first num      
+mov bh, 0
+mov dx, 0
+mov ah, 02h
+int 10h  
+
+; read and write first num  
+mov bp,offset msg1
+mov ax,1301h
+mov bx, 0fh
+mov cx,len1
+mov dh, 0
+mov dl, 0
+int 10h        
+
 xor ax, ax
-lea dx, msg1
-mov ah, 09h
-int 21h         
-
 xor dx, dx
 start_read_first:
 
@@ -53,19 +58,17 @@ start_read_first:
     jmp start_read_first  
     
 exit_read_first:
-
-    
+ 
 mov num1, dx
-
-; new line:
-putc 0Dh
-putc 0Ah
    
 ;read and write second num    
-xor ax, ax
-lea dx, msg2
-mov ah, 09h    
-int 21h 
+mov bp,offset msg2
+mov ax,1301h
+mov bx, 0fh
+mov cx,len2 
+mov dh, 3
+mov dl, 0
+int 10h 
  
 xor dx, dx
 start_read_second:
@@ -107,13 +110,14 @@ exit_read_second:
 
 mov num2, dx
 
-putc 0Dh
-putc 0Ah   
-
 ;sum them
-lea dx, msg3
-mov ah, 09h   
-int 21h 
+mov bp,offset msg3
+mov ax,1301h
+mov bx, 0fh
+mov cx,len3 
+mov dh, 4
+mov dl, 0
+int 10h 
 
 mov ax, num1
 add ax, num2  
@@ -139,14 +143,15 @@ mov ah, 0xe
 int 10h
 dec cx
 jne L1  
-          
-putc 0Dh
-putc 0Ah 
 
 ;exit
-lea dx, exit_msg
-mov ah, 09h   
-int 21h 
+mov bp,offset exit_msg
+mov ax,1301h
+mov bx, 0fh
+mov cx,len4 
+mov dh, 5
+mov dl, 0
+int 10h 
 
 mov ah, 0
 int 16h
@@ -154,9 +159,13 @@ int 16h
 ret
 
 msg1 db 0Dh,0Ah, 0Dh,0Ah, 'Enter first number: $'
+len1 dw 18h
 msg2 db "Enter second number: $"
+len2 dw 15h
 msg3 db "Result is: $"
+len3 dw 0Bh
 exit_msg db "Input smth to exit$"
+len4 dw 12h
 ; first and second number:
 num1 dw ?
 num2 dw ?
