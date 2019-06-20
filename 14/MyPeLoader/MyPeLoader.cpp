@@ -28,7 +28,10 @@ int main()
 		cout << "DOS signature mismatch" << endl;
 		exit(1001);
 	}
+
+	cout << "ELFANEW " << dosHeader->e_lfanew << endl;
 	IMAGE_NT_HEADERS* ntHeaders = PIMAGE_NT_HEADERS((DWORD)fileImage + dosHeader->e_lfanew);
+	cout << "EP " << ntHeaders->OptionalHeader.AddressOfEntryPoint << endl;
 	IMAGE_FILE_HEADER imageFileHeader = (IMAGE_FILE_HEADER)ntHeaders->FileHeader;
 	IMAGE_OPTIONAL_HEADER imageOptionalHeader = (IMAGE_OPTIONAL_HEADER)ntHeaders->OptionalHeader;
 	DWORD imageSignature = ntHeaders->Signature;
